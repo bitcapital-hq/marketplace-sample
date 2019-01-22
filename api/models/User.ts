@@ -86,4 +86,8 @@ export default class User extends BaseModel implements UserSchema {
   public static async findByName(name: string): Promise<User | undefined> {
     return this.findOne({ where: {name} });
   }
+
+  public static async findById(id: string): Promise<User | undefined> {
+    return this.findOne(id);
+  }
 }

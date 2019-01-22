@@ -2,8 +2,8 @@
 import Bitcapital, {Session, StorageUtil, MemoryStorage} from 'bitcapital-core-sdk';
 import Server, { ServerOptions } from 'ts-framework';
 import * as Config from '../config';
-import StatusController from './controllers/StatusController';
-import UptimeService from './services/UptimeService';
+import UserController from './controllers/UserController';
+import {UptimeService, UserService} from './services';
 import MainDatabase from './database';
 
 export default class MainServer extends Server {
@@ -13,11 +13,12 @@ export default class MainServer extends Server {
     super({
       ...Config.server,
       router: {
-        controllers: { StatusController }
+        controllers: { UserController }
       },
       children: [
         MainDatabase.getInstance(),
-        UptimeService.getInstance()
+        UptimeService.getInstance(),
+        UserService.initialize({name: ''})
       ],
       ...options,
     });
