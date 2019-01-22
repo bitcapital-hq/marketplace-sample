@@ -1,0 +1,29 @@
+{
+  "name": "marketplace-sample",
+  "version": "0.0.1",
+  "main": "dist/start.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-framework listen",
+    "watch": "ts-framework watch",
+    "build": "yarn tsc",
+    "console": "ts-framework console",
+    "test": "jest --config jest.json"
+  },
+  "dependencies": {
+    "pjson": "^1.0.9",
+    "ts-framework": "nxtep-io/ts-framework#v2.4",
+    "ts-framework-cli": "nxtep-io/ts-framework-cli#v2.4",
+    "ts-framework-common": "nxtep-io/ts-framework-common#2.3.1",
+    "ts-node": "^7.0.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^22.2.3",
+    "@types/supertest": "^2.0.4",
+    "hat": "^0.0.3",
+    "jest": "^22.4.3",
+    "rimraf": "^2.6.2",
+    "supertest": "^3.0.0",
+    "ts-jest": "^22.4.4"
+  }
+}
