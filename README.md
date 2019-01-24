@@ -1,8 +1,9 @@
-#Marketplace sample
+Marketplace sample
 =====================================
-##Sample project of a bit capital client
 
-#Steps
+Sample project of a bit capital client
+
+# Steps
 1) Setup local infrastructure - DONE
 2) Project setup - DONE
 3) Design database schema - DONE
