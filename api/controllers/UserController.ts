@@ -1,7 +1,7 @@
 import * as Package from 'pjson';
 import { Controller, Get, BaseRequest, BaseResponse, Post } from 'ts-framework';
 import {User} from '../models';
-import { UserService } from '../services/';
+import { UserService, ExtractService } from '../services/';
 
 @Controller('/user')
 export default class UserController {
@@ -20,7 +20,10 @@ export default class UserController {
 
   @Get('/:id/extract')
   static async getUserExtract(req: BaseRequest, res: BaseResponse) {
-
+    return res.success({
+      buys: await ExtractService.getBuyExtractForUser(req.params.id),
+      sells: await ExtractService.getSellExtractForUser(req.params.id)
+    });
   }
 
   @Get('/:id/crypto-extract')
@@ -28,9 +31,9 @@ export default class UserController {
 
   }
 
-  @Post('/:id/signup')
+  @Post('/signup')
   static async userSignup(req: BaseRequest, res: BaseResponse) {
-    
+    return res.success(await UserService.getInstance({}).createUser(req.body));
   }
 
   @Post('/:id/documents')

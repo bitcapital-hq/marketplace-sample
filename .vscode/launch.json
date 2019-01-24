@@ -11,22 +11,25 @@
       "port": 9229,
     },
     {
-      "name": "Watch",
       "type": "node",
       "request": "launch",
+      "name": "start (ts-node/local)",
       "cwd": "${workspaceRoot}",
-      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/ts-framework",
-      "port": 9229,
-      "restart": true,
+      "runtimeExecutable": "/Users/danilomendes/n/bin/node",
       "runtimeArgs": [
-        "watch",
-        "--inspect=9229"
+        "-r",
+        "ts-node/register",
       ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
+      "args": [
+        "${workspaceFolder}/start.ts"
+      ],
       "env": {
         "NODE_ENV": "development",
-      }
+        "PORT": "3000"
+      },
+      "sourceMaps": true,
+      "internalConsoleOptions": "openOnFirstSessionStart",
+      "console": "integratedTerminal"
     },
     {
       "name": "Debug Jest Tests",
@@ -43,7 +46,7 @@
         "--runInBand",
         "--config=jest.json"
       ],
-      "console": "integratedTerminal",
+      "console": "externalTerminal",
       "internalConsoleOptions": "neverOpen",
     },
     {

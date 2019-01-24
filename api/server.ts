@@ -5,6 +5,8 @@ import * as Config from '../config';
 import UserController from './controllers/UserController';
 import {UptimeService, UserService} from './services';
 import MainDatabase from './database';
+import ExtractService from './services/ExtractService';
+import BitcapitalService from './services/BitcapitalService';
 
 export default class MainServer extends Server {
   protected bitcapital: Bitcapital;
@@ -18,29 +20,11 @@ export default class MainServer extends Server {
       children: [
         MainDatabase.getInstance(),
         UptimeService.getInstance(),
-        UserService.initialize({name: ''})
+        UserService.initialize({}),
+        ExtractService.initialize({}),
+        BitcapitalService.initialize({})
       ],
       ...options,
     });
-  }
-
-  async onReady() {
-    await super.onReady();
-    const sessionConfig = { ...Config.bitcapital };
-
-    const session = new Session({
-      http: sessionConfig,
-      oauth: sessionConfig,
-      storage: new StorageUtil("session", new MemoryStorage())
-    });
-
-    // Initialize service instances
-    this.bitcapital = Bitcapital.initialize({ session, ...sessionConfig });
-    const credentials = await this.bitcapital.session().password({
-      username: Config.bitcapital.email,
-      password: Config.bitcapital.password,
-    });
-
-    this.logger.info('Successfully authenticated in Bitcapital platform', { credentials });
   }
 }

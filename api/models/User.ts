@@ -3,6 +3,7 @@ import BaseModel from './BaseModel';
 import { IsEmail, IsNumberString, IsEnum } from 'class-validator';
 import { BaseModelSchema } from './BaseModel';
 import { UserStatus } from 'bitcapital-core-sdk';
+import UserService from '../services/UserService';
 
 export interface UserSchema extends BaseModelSchema {
   name: string;
@@ -19,6 +20,8 @@ export interface UserSchema extends BaseModelSchema {
   accountAgencyNumber?: string;
   accountBankNumber?: string;
   accountNumber?: string;
+  bitcapitalId: string;
+  bitcapitalWalletId: string;
 }
 
 @Entity(User.tableName)
@@ -35,9 +38,9 @@ export default class User extends BaseModel implements UserSchema {
   @Column({ nullable: false })
   public document: string = undefined;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, default: UserStatus.ACTIVE })
   @IsEnum(UserStatus)
-  public status: string = undefined;
+  public status: string = UserStatus.ACTIVE;
 
   @Column({ nullable: false })
   @IsNumberString()
@@ -75,6 +78,12 @@ export default class User extends BaseModel implements UserSchema {
   @Column()
   @IsNumberString()
   public accountNumber?: string = undefined;
+
+  @Column()
+  public bitcapitalId: string = undefined;
+
+  @Column()
+  public bitcapitalWalletId: string = undefined;
 
   public constructor(data: Partial<UserSchema>) {
     super(data);
