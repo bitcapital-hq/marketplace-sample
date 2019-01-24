@@ -1,4 +1,4 @@
-import {Column,  Entity} from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import BaseModel from './BaseModel';
 import { IsEmail, IsNumberString, IsEnum } from 'class-validator';
 import { BaseModelSchema } from './BaseModel';
@@ -85,8 +85,8 @@ export default class User extends BaseModel implements UserSchema {
   @Column()
   public bitcapitalWalletId: string = undefined;
 
-  @Column()
-  public bitcapitalDocumentId: string = undefined;
+  @Column({ nullable: true })
+  public bitcapitalDocumentId?: string = undefined;
 
   public constructor(data: Partial<UserSchema>) {
     super(data);

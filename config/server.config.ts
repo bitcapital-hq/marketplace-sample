@@ -12,4 +12,8 @@ export default {
   logger,
   sentry,
   port,
+  request:{
+    bodyLimit: "10mb",
+    multer:{}
+  }
 }

@@ -20,7 +20,7 @@ export default class DocumentService extends Service{
                                 .then(consumer => {return consumer.status});
     }
 
-    public async setDocumentForUser(id: string, body: any){
+    public async setDocumentForUser(id: string, photoBase64: string){
         const bitcapitalClient = BitcapitalService.getInstance({}).bitcapital;
         const user: User = await UserService.getInstance({}).getUser(id);
 
@@ -32,7 +32,7 @@ export default class DocumentService extends Service{
             user.bitcapitalId,
             DocumentType.BRL_IDENTITY,
             "front",
-            body.photo
+            photoBase64
         );
 
         user.bitcapitalDocumentId = document.id

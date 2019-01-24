@@ -26,9 +26,7 @@ export default class UserController {
 
   @Get('/:id/crypto-extract')
   static async getUserCryptoExtract(req: BaseRequest, res: BaseResponse) {
-    return res.success({
-      message: "Not implemented yet."
-    });
+    return res.success(ExtractService.getInstance({}).getCryptoExtractForUser(req.params.id));
   }
 
   @Post('/signup')
@@ -43,7 +41,10 @@ export default class UserController {
 
   @Post('/:id/documents')
   static async sendKYCDocuments(req: BaseRequest, res: BaseResponse) {
-    return res.success(await DocumentService.getInstance({}).setDocumentForUser(req.params.id, req.body));
+    const photo = (req as any).file;
+
+    return res.success(await DocumentService.getInstance({})
+              .setDocumentForUser(req.params.id, Buffer.from(photo.buffer).toString('base64')));
   }
   
 }
