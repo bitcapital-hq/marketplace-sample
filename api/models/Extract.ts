@@ -39,4 +39,16 @@ export default class Extract extends BaseModel implements ExtractSchema{
     public constructor(data: Partial<ExtractSchema>) {
         super(data);
     }
+
+    public static async getBuysForUser(userId: string){
+        return this.createQueryBuilder("user")
+                    .where("customer.id = :id", { id: userId })
+                    .getMany();
+    }
+
+    public static async getSellsForUser(userId: string){
+        return this.createQueryBuilder("user")
+        .where("seller.id = :id", { id: userId })
+        .getMany();
+    }
 }

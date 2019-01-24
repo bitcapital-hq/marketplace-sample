@@ -31,7 +31,7 @@
     "ts-jest": "^22.4.4"
   },
   "resolutions": {
-    "**/typeorm": "0.2.11",
+    "**/typeorm": "0.2.12",
     "**/ts-framework-sql": "nxtep-io/ts-framework-sql#v2",
     "ts-framework-common": "nxtep-io/ts-framework-common.git#v2"
   }
