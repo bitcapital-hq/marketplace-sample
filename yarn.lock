@@ -789,9 +789,9 @@ binaryextensions@^2.1.2:
   resolved "https://registry.yarnpkg.com/binaryextensions/-/binaryextensions-2.1.2.tgz#c83c3d74233ba7674e4f313cb2a2b70f54e94b7c"
   integrity sha512-xVNN69YGDghOqCCtA6FI7avYrr02mTJjOgB0/f1VPD3pJC8QEvjTKWc4epDx8AqxxA75NI0QpVM2gPJXUbE4Tg==
 
-"bitcapital-core-sdk@github:bitcapital-hq/bitcapital-core-sdk#1.3.0":
-  version "1.2.0"
-  resolved "https://codeload.github.com/bitcapital-hq/bitcapital-core-sdk/tar.gz/1612a2f9f2fe17accb76a2f788b0abe5c5a974b7"
+bitcapital-core-sdk@bitcapital-hq/bitcapital-core-sdk#1.5.0:
+  version "1.5.0"
+  resolved "https://codeload.github.com/bitcapital-hq/bitcapital-core-sdk/tar.gz/d237f3a74bc30ab9222d0d46e134723157e46d0e"
   dependencies:
     "@types/crypto-js" "^3.1.43"
     axios "^0.17.1"

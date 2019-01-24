@@ -11,11 +11,11 @@ export default class ExtractService extends Service {
         super(options);
     }
 
-    public static async getBuyExtractForUser(id: string){
+    public async getBuyExtractForUser(id: string){
         return Extract.getBuysForUser(id);
     }
 
-    public static async getSellExtractForUser(id: string){
+    public async getSellExtractForUser(id: string){
         return Extract.getSellsForUser(id);
     }
 

@@ -7,6 +7,7 @@ import {UptimeService, UserService} from './services';
 import MainDatabase from './database';
 import ExtractService from './services/ExtractService';
 import BitcapitalService from './services/BitcapitalService';
+import DocumentService from './services/DocumentService';
 
 export default class MainServer extends Server {
   protected bitcapital: Bitcapital;
@@ -22,7 +23,8 @@ export default class MainServer extends Server {
         UptimeService.getInstance(),
         UserService.initialize({}),
         ExtractService.initialize({}),
-        BitcapitalService.initialize({})
+        BitcapitalService.initialize({}),
+        DocumentService.initialize({})
       ],
       ...options,
     });

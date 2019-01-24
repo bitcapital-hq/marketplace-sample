@@ -10,7 +10,7 @@ export interface UserServiceOptions extends ServiceOptions{
 export default class UserService extends Service {
     protected static instance: UserService;
 
-    public static async getUser(id: string){
+    public async getUser(id: string){
         return User.findById(id);
     }
 

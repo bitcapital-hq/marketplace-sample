@@ -85,6 +85,9 @@ export default class User extends BaseModel implements UserSchema {
   @Column()
   public bitcapitalWalletId: string = undefined;
 
+  @Column()
+  public bitcapitalDocumentId: string = undefined;
+
   public constructor(data: Partial<UserSchema>) {
     super(data);
   }
