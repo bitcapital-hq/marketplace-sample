@@ -12,9 +12,12 @@ Sample project of a bit capital client
 6) Get user information - DONE
 7) KYC documents - DONE
 8) Crypto transaction extract - DONE
-9) User Balance
-10) Deposit asset
-11) Withdraw asset
+9) Deposit asset - DONE
+10) Withdraw asset - DONE
+11) Create product
+12) Create sell offer
+13) User buy product
+14) User Balance
 
 ....
 N) Develop unit tests

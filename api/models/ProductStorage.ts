@@ -6,7 +6,11 @@ import Product from './Product';
 import User from './User';
 
 export interface ProductStorageSchema extends BaseModelSchema{
-
+    price: number,
+    deliveryFee: number,
+    quantity: number,
+    owner: User,
+    product: Product
 }
 
 @Entity(ProductStorage.tableName)
@@ -18,15 +22,12 @@ export default class ProductStorage extends BaseModel implements ProductStorageS
     public price: number = undefined;
 
     @Column({ nullable: false })
-    @IsNumber()
-    public deliveryFee: string = undefined;
+    public deliveryFee: number = undefined;
 
     @Column({ nullable: false })
-    @IsNumber()
-    public quantity: string = undefined;
+    public quantity: number = undefined;
 
-    @ManyToOne(type => User,
-    {
+    @ManyToOne(type => User,{
         nullable: false
     })
     public owner: User = undefined;
@@ -38,5 +39,18 @@ export default class ProductStorage extends BaseModel implements ProductStorageS
     
     public constructor(data: Partial<ProductStorageSchema>) {
         super(data);
+    }
+
+    public static async findProductStorageForUserAndProduct(user: User, product:Product){
+        return this.findOne({
+            where:{
+                owner: user,
+                product: product
+            }
+        });
+    }
+
+    public static async listAllStorages(){
+        
     }
 }

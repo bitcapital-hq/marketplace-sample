@@ -24,5 +24,9 @@ export default class Product extends BaseModel implements ProductSchema {
     public constructor(data: Partial<ProductSchema>) {
         super(data);
     }
+
+    public static async findByName(name: string): Promise<Product | undefined> {
+        return this.findOne({ where: {name} });
+    }
 }
 
