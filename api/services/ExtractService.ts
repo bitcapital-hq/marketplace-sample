@@ -12,7 +12,7 @@ export default class ExtractService extends Service {
         super(options);
     }
 
-    public async getCryptoExtractForUser(id: string){
+    public async getBitcapitalExtractForUser(id: string){
         const bitcapitalClient = BitcapitalService.getInstance({}).bitcapital;
         const user = await User.findOne(id);
 

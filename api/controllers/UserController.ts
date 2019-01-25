@@ -26,7 +26,7 @@ export default class UserController {
 
   @Get('/:id/crypto-extract')
   static async getUserCryptoExtract(req: BaseRequest, res: BaseResponse) {
-    return res.success(ExtractService.getInstance({}).getCryptoExtractForUser(req.params.id));
+    return res.success(ExtractService.getInstance({}).getBitcapitalExtractForUser(req.params.id));
   }
 
   @Post('/signup')

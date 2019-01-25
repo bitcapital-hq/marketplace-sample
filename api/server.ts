@@ -10,6 +10,7 @@ import BitcapitalService from './services/BitcapitalService';
 import DocumentService from './services/DocumentService';
 import { Logger } from 'ts-framework-common';
 import * as express from "express";
+import AssetService from './services/AssetService';
 
 
 const sentry = process.env.SENTRY_DSN ? { dsn: process.env.SENTRY_DSN } : undefined;
@@ -30,7 +31,8 @@ export default class MainServer extends Server {
         UserService.initialize({}),
         ExtractService.initialize({}),
         BitcapitalService.initialize({}),
-        DocumentService.initialize({})
+        DocumentService.initialize({}),
+        AssetService.initialize({})
       ],
       ...options,
     });
