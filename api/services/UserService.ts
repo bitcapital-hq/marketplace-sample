@@ -14,6 +14,11 @@ export default class UserService extends Service {
         return User.findById(id);
     }
 
+    public async getUserBalance(id: string){
+        const user: User = await this.getUser(id);
+        
+    }
+
     public async createUser(body: any) {
         const user = await User.create({
             name: body.name,

@@ -14,6 +14,13 @@ export default class UserController {
     });
   }
 
+  @Get('/:id/balance')
+  static async getUserBalance(req: BaseRequest, res: BaseResponse){
+    return res.success({
+      balance: UserService.getInstance({}).getUserBalance(req.params.id)
+    });
+  }
+
   @Get('/:id/extract')
   static async getUserExtract(req: BaseRequest, res: BaseResponse) {
     const [buys, sells] = await Promise.all([

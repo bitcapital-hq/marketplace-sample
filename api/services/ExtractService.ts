@@ -1,5 +1,5 @@
 import { Service, ServiceOptions } from 'ts-framework-common';
-import { Extract, User } from '../models';
+import { Extract, User, ProductStorage } from '../models';
 import BitcapitalService from './BitcapitalService';
 
 export interface ExtractServiceOptions extends ServiceOptions{
@@ -10,6 +10,20 @@ export default class ExtractService extends Service {
 
     constructor(options: ExtractServiceOptions) {
         super(options);
+    }
+
+    public async createExtract
+    (totalValue: number, quantity: number, customer: User, seller: User, storage: ProductStorage){
+        const extract = await Extract.create({
+            totalValue: totalValue,
+            quantity: quantity,
+            customer: customer,
+            seller: seller,
+            storage: storage
+        });
+
+        await extract.validate();
+        return await extract.save();
     }
 
     public async getBitcapitalExtractForUser(id: string){

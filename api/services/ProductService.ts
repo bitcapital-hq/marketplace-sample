@@ -5,6 +5,7 @@ import ProductStorage from '../models/ProductStorage';
 import AssetService from './AssetService';
 import { Transaction } from 'typeorm';
 import { Extract } from '../models';
+import { ExtractService } from '.';
 
 export interface ProductServiceOptions extends ServiceOptions{
 
@@ -46,15 +47,7 @@ export default class ProductService extends Service {
         const storage = await this.addProductToUserStorage(product, buyer, quantity, productStorage.price, productStorage.deliveryFee)
     
         //add transaction to the extract
-        await Extract.create({
-            totalValue: totalPrice,
-            quantity: quantity,
-            customer: buyer,
-            seller: seller,
-            storage: productStorage
-        });
-
-        return storage;
+        return await ExtractService.getInstance({}).createExtract(totalPrice, quantity, buyer, seller, storage); 
     }   
 
     public async listAvailableProducts(){
@@ -62,11 +55,14 @@ export default class ProductService extends Service {
     }
 
     public async createProduct(name: string, description:string, imageUrl:string) {
-        return Product.create({
+        const product:Product = await Product.create({
             name: name,
             description: description,
             imageUrl: imageUrl
         });
+
+        product.validate();
+        return product.save();
     }
 
     public async addProductToUserStorage 
