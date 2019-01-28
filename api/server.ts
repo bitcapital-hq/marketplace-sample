@@ -9,10 +9,10 @@ import ExtractService from './services/ExtractService';
 import BitcapitalService from './services/BitcapitalService';
 import DocumentService from './services/DocumentService';
 import { Logger } from 'ts-framework-common';
-import * as express from "express";
 import AssetService from './services/AssetService';
 import ProductService from './services/ProductService';
-
+import AssetController from './controllers/AssetController';
+import ProductController from './controllers/ProductController';
 
 const sentry = process.env.SENTRY_DSN ? { dsn: process.env.SENTRY_DSN } : undefined;
 const logger = Logger.getInstance({ sentry });
@@ -24,7 +24,9 @@ export default class MainServer extends Server {
     super({
       ...Config.server,
       router: {
-        controllers: { UserController }
+        controllers: { UserController,
+                        AssetController,
+                        ProductController }
       },
       children: [
         MainDatabase.getInstance(),

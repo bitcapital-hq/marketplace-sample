@@ -51,6 +51,6 @@ export default class ProductStorage extends BaseModel implements ProductStorageS
     }
 
     public static async listAllStorages(){
-        
+        return this.find();
     }
 }

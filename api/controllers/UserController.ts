@@ -4,7 +4,7 @@ import {User} from '../models';
 import { UserService, ExtractService } from '../services/';
 import DocumentService from '../services/DocumentService';
 
-@Controller('/user')
+@Controller('/users')
 export default class UserController {
 
   @Get('/:id')
@@ -24,9 +24,14 @@ export default class UserController {
     return res.success({ buys, sells });
   }
 
-  @Get('/:id/crypto-extract')
+  @Get('/:id/stellar-extract')
   static async getUserCryptoExtract(req: BaseRequest, res: BaseResponse) {
-    return res.success(ExtractService.getInstance({}).getBitcapitalExtractForUser(req.params.id));
+    return res.success(await ExtractService.getInstance({}).getBitcapitalExtractForUser(req.params.id));
+  }
+
+  @Get('/:id/document')
+  static async getKycStatusForUser(req: BaseRequest, res: BaseResponse) {
+    return res.success(await DocumentService.getInstance({}).getDocumentStatusForUser(req.params.id));
   }
 
   @Post('/signup')
@@ -34,17 +39,11 @@ export default class UserController {
     return res.success(await UserService.getInstance({}).createUser(req.body));
   }
 
-  @Get('/:id/documents')
-  static async getKycStatusForUser(req: BaseRequest, res: BaseResponse) {
-    return res.success(await DocumentService.getInstance({}).getDocumentStatusForUser(req.params.id));
-  }
-
-  @Post('/:id/documents')
+  @Post('/:id/document')
   static async sendKYCDocuments(req: BaseRequest, res: BaseResponse) {
     const photo = (req as any).file;
 
     return res.success(await DocumentService.getInstance({})
               .setDocumentForUser(req.params.id, Buffer.from(photo.buffer).toString('base64')));
   }
-  
 }

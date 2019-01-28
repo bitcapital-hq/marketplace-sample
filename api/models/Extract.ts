@@ -5,7 +5,11 @@ import User from './User';
 import ProductStorage from './ProductStorage';
 
 export interface ExtractSchema extends BaseModelSchema{
-
+    totalValue: number,
+    quantity: number,
+    customer: User,
+    seller: User,
+    storage: ProductStorage
 }
 
 @Entity(Extract.tableName)

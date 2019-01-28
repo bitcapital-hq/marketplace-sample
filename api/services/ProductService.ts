@@ -3,6 +3,8 @@ import Product from '../models/Product';
 import User from '../models/User';
 import ProductStorage from '../models/ProductStorage';
 import AssetService from './AssetService';
+import { Transaction } from 'typeorm';
+import { Extract } from '../models';
 
 export interface ProductServiceOptions extends ServiceOptions{
 
@@ -11,12 +13,17 @@ export interface ProductServiceOptions extends ServiceOptions{
 export default class ProductService extends Service {
     protected static instance: ProductService;
 
-    public async buyProduct(buyerId:string, sellerId:string, productName:string, quantity:number){
+    @Transaction()
+    public async buyProduct(buyerId:string, sellerId:string, productName:string, quantity:number) {
         const buyer: User =  await User.findById(buyerId);
         const seller: User =  await User.findById(sellerId);
         const product: Product = await Product.findByName(productName);
         const productStorage: ProductStorage = await ProductStorage.findProductStorageForUserAndProduct(seller, product);
         const assetService: AssetService = AssetService.getInstance({});
+
+        if(quantity <= 0){
+            throw new BaseError('Product quantity is invalid.', {quantity: quantity});
+        }
 
         //não gostei disso mas é a vida
         if(productStorage == null || productStorage.quantity < quantity){
@@ -24,7 +31,7 @@ export default class ProductService extends Service {
                                                             quantity: quantity });
         }
         
-        const totalPrice = productStorage.price * quantity;
+        const totalPrice = (productStorage.price * quantity) + productStorage.deliveryFee;
 
         //tira a grana do comprador
         await assetService.debitAssetFromUser(buyer, totalPrice);
@@ -36,14 +43,25 @@ export default class ProductService extends Service {
         await assetService.creditAssetForUser(seller, totalPrice);
 
         //da o produto pro comprador
-        return await this.addProductToUserStorage(product, buyer, quantity, productStorage.price, productStorage.deliveryFee)
-    }
+        const storage = await this.addProductToUserStorage(product, buyer, quantity, productStorage.price, productStorage.deliveryFee)
+    
+        //add transaction to the extract
+        await Extract.create({
+            totalValue: totalPrice,
+            quantity: quantity,
+            customer: buyer,
+            seller: seller,
+            storage: productStorage
+        });
+
+        return storage;
+    }   
 
     public async listAvailableProducts(){
         return ProductStorage.listAllStorages();
     }
 
-    public async createProduct(name: string, description:string, imageUrl:string){
+    public async createProduct(name: string, description:string, imageUrl:string) {
         return Product.create({
             name: name,
             description: description,
@@ -52,7 +70,14 @@ export default class ProductService extends Service {
     }
 
     public async addProductToUserStorage 
-    (product: Product, user: User, quantity:number, price?: number, deliveryFee?: number){
+    (product: Product, user: User, quantity:number, price?: number, deliveryFee?: number) {
+        if(price <= 0 || deliveryFee <= 0){
+            throw new BaseError('Price or delivery fee are invalid.',{
+                price: price,
+                quantity: quantity
+            });
+        }
+
         const storage = await ProductStorage.findProductStorageForUserAndProduct(user, product);
 
         if(storage == null){
@@ -78,10 +103,10 @@ export default class ProductService extends Service {
         const storage = await ProductStorage.findProductStorageForUserAndProduct(user, product);
 
         if(storage == null){
-            throw new Error('Could not remove product from storage because the storage doesnt exist. ')
+            throw new BaseError('Could not remove product from storage because the storage doesnt exist. ')
         } else {
             if(storage.quantity < quantity) {
-                throw new Error('Could not removed product from storage because the storage limit was exceded')
+                throw new BaseError('Could not removed product from storage because the storage limit was exceded')
             } else {
                 storage.quantity -= quantity;
                 return ProductStorage.save(storage);
