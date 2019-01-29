@@ -8,29 +8,42 @@ export default class ProductController {
 
     @Get('/available')
     public static async listAvailableProducts(req: BaseRequest, res: BaseResponse) {
-        return res.success(await ProductService.getInstance({}).listAvailableProducts());
+        const products = await ProductService.getInstance({}).listAvailableProducts();
+        return res.success(products);
     }
 
     @Post('/:name/buy')
     public static async buyProduct(req: BaseRequest, res: BaseResponse) {
-        return res.success(ProductService.getInstance({})
-                            .buyProduct(req.body.buyerId, req.body.sellerId, req.params.name, req.body.amount));
+        const { buyerId, sellerId, amount } : 
+        { buyerId:string, sellerId:string, amount:number } = req.body;
+
+        const { name }:{ name:string } = req.params;
+        const result = ProductService.getInstance()
+                                .buyProduct(buyerId, sellerId, name, amount);
+
+        return res.success(result);
     }
 
     @Post('/create')
     public static async createProduct(req: BaseRequest, res: BaseResponse) {
-        return res.success(await ProductService.getInstance({}).createProduct(
-            req.body.name, req.body.description, req.body.url
-        ));
+        const {name, description, url} : {name:string, description:string, url:string} = req.body;
+
+        const product = await ProductService.getInstance().createProduct(name, description, url);
+        return res.success(product);
     }
 
     @Post('/:name/sell')
     public static async addProductSellOffer(req: BaseRequest, res: BaseResponse) {
-        const product: Product = await Product.findByName(req.params.name);
-        const sellerId: User = await User.findById(req.body.sellerId);
+        const { sellerId, amount, price, deliveryFee } :
+            { sellerId:string, amount:number, price:number, deliveryFee:number } = req.body;
+        const { name }: { name:string } = req.params;
+        const product: Product = await Product.findByName(name);
+        const seller: User = await User.findById(sellerId);
 
-        return res.success(ProductService.getInstance({})
-                            .addProductToUserStorage(product, sellerId, req.body.amount, req.body.price, req.body.deliveryFee));
+        const storage = await ProductService.getInstance()
+                        .addProductToUserStorage(product, seller, amount, price, deliveryFee);
+
+        return res.success(storage);
     }
 
 }

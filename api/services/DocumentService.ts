@@ -12,17 +12,17 @@ export interface DocumentServiceOptions extends ServiceOptions{
 export default class DocumentService extends Service{
     protected static instance: DocumentService;
 
-    public async getDocumentStatusForUser(id: string){
-        const bitcapitalClient = BitcapitalService.getInstance({}).bitcapital;
-        const user: User = await UserService.getInstance({}).getUser(id);
+    public async getDocumentStatusForUser(id: string) {
+        const bitcapitalClient = BitcapitalService.getInstance().bitcapital;
+        const user: User = await UserService.getInstance().getUser(id);
 
-        return bitcapitalClient.consumers().findOne(user.bitcapitalId)
-                                .then(consumer => {return consumer.status});
+        const consumer = await bitcapitalClient.consumers().findOne(user.bitcapitalId);
+        return consumer.status;
     }
 
-    public async setDocumentForUser(id: string, photoBase64: string){
-        const bitcapitalClient = BitcapitalService.getInstance({}).bitcapital;
-        const user: User = await UserService.getInstance({}).getUser(id);
+    public async setDocumentForUser(id: string, photoBase64: string) {
+        const bitcapitalClient = BitcapitalService.getInstance().bitcapital;
+        const user: User = await UserService.getInstance().getUser(id);
 
         if(user == null){
             throw new BaseError('Cannot find user with id', {id: id});
@@ -49,14 +49,14 @@ export default class DocumentService extends Service{
         super(options);
     }
 
-    public static getInstance(options: DocumentServiceOptions) {
+    public static getInstance(options: DocumentServiceOptions = {}) {
         if (!this.instance) {
           throw new Error("Document service is invalid or hasn't been initialized yet");
         }
         return this.instance;
     }
     
-    public static initialize(options: DocumentServiceOptions) {
+    public static initialize(options: DocumentServiceOptions = {}) {
         const service = new DocumentService(options);
     
         if(!this.instance) {

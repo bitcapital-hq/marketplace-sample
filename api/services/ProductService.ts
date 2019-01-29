@@ -20,14 +20,14 @@ export default class ProductService extends Service {
         const seller: User =  await User.findById(sellerId);
         const product: Product = await Product.findByName(productName);
         const productStorage: ProductStorage = await ProductStorage.findProductStorageForUserAndProduct(seller, product);
-        const assetService: AssetService = AssetService.getInstance({});
+        const assetService: AssetService = AssetService.getInstance();
 
         if(quantity <= 0){
-            throw new BaseError('Product quantity is invalid.', {quantity: quantity});
+            throw new BaseError('Product quantity is invalid.', {quantity});
         }
 
         //não gostei disso mas é a vida
-        if(productStorage == null || productStorage.quantity < quantity){
+        if(productStorage === null || productStorage.quantity < quantity){
             throw new BaseError('Storage limit exceeded or storage doesnt exist.', { ProductStorage: productStorage,
                                                             quantity: quantity });
         }
@@ -47,7 +47,7 @@ export default class ProductService extends Service {
         const storage = await this.addProductToUserStorage(product, buyer, quantity, productStorage.price, productStorage.deliveryFee)
     
         //add transaction to the extract
-        return await ExtractService.getInstance({}).createExtract(totalPrice, quantity, buyer, seller, storage); 
+        return await ExtractService.getInstance().createExtract(totalPrice, quantity, buyer, seller, storage); 
     }   
 
     public async listAvailableProducts(){
@@ -76,7 +76,7 @@ export default class ProductService extends Service {
 
         const storage = await ProductStorage.findProductStorageForUserAndProduct(user, product);
 
-        if(storage == null){
+        if(storage === null){
             //create new storage
             return ProductStorage.create({
                 price: price,
@@ -114,14 +114,14 @@ export default class ProductService extends Service {
         super(options);
     }
     
-    public static getInstance(options: ProductServiceOptions) {
+    public static getInstance(options: ProductServiceOptions = {}) {
         if (!this.instance) {
           throw new Error("Product service is invalid or hasn't been initialized yet");
         }
         return this.instance;
     }
     
-    public static initialize(options: ProductServiceOptions) {
+    public static initialize(options: ProductServiceOptions = {}) {
         const service = new ProductService(options);
         if(!this.instance) {
           this.instance = service;

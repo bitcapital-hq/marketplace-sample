@@ -7,15 +7,17 @@ export default class AssetController {
     
     @Post('/debit')
     public static async debitAssetFromUser(req: BaseRequest, res: BaseResponse) {
-        const user: User = await User.findById(req.body.userId);
+        const { userId, amount }: { userId: string, amount: number } = req.body
+        const user: User = await User.findById(userId);
 
-        return res.success(AssetService.getInstance({}).creditAssetForUser(user, req.body.amount))
+        return res.success(AssetService.getInstance().creditAssetForUser(user, amount))
     }
 
     @Post('/credit')
     public static async creditAssetForUser(req: BaseRequest, res: BaseResponse) {
-        const user: User = await User.findById(req.body.userId);
+        const { userId, amount }: { userId: string, amount: number } = req.body
+        const user: User = await User.findById(userId);
 
-        return res.success(AssetService.getInstance({}).creditAssetForUser(user, req.body.amount))
+        return res.success(AssetService.getInstance().creditAssetForUser(user, amount))
     }
 }

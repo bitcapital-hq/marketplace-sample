@@ -16,7 +16,7 @@ export default class UserService extends Service {
 
     public async getUserBalance(id: string) {
         const user: User = await this.getUser(id);
-        const bitcapitalClient = BitcapitalService.getInstance({}).bitcapital;
+        const bitcapitalClient = BitcapitalService.getInstance().bitcapital;
 
         const wallet: Wallet = await bitcapitalClient.wallets().findOne(user.bitcapitalWalletId);
         return wallet.balances;
@@ -53,7 +53,7 @@ export default class UserService extends Service {
     }
 
     private async createUserOnBitcapital(body: any) {
-        const bitcapital = BitcapitalService.getInstance({}).bitcapital;
+        const bitcapital = BitcapitalService.getInstance().bitcapital;
 
         return bitcapital.consumers().create({
             "firstName": body.name,
@@ -85,14 +85,14 @@ export default class UserService extends Service {
         super(options);
     }
 
-    public static getInstance(options: UserServiceOptions) {
+    public static getInstance(options: UserServiceOptions = {}) {
         if (!this.instance) {
           throw new Error("User service is invalid or hasn't been initialized yet");
         }
         return this.instance;
     }
     
-    public static initialize(options: UserServiceOptions) {
+    public static initialize(options: UserServiceOptions = {}) {
         const service = new UserService(options);
     
         if(!this.instance) {

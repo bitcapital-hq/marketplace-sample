@@ -16,7 +16,7 @@ export default class AssetService extends Service{
     }
 
     public async creditAssetForUser(receiver:User, amount:number){
-        const bitcapitalClient = BitcapitalService.getInstance({}).bitcapital;
+        const bitcapitalClient = BitcapitalService.getInstance().bitcapital;
         
         return await bitcapitalClient.assets().emit({
             amount: amount.toString(),
@@ -26,7 +26,7 @@ export default class AssetService extends Service{
     }
 
     public async debitAssetFromUser(sender:User, amount:number){
-        const bitcapitalClient = BitcapitalService.getInstance({}).bitcapital;
+        const bitcapitalClient = BitcapitalService.getInstance().bitcapital;
 
         return await bitcapitalClient.assets().destroy({
             amount: amount.toString(),
@@ -35,14 +35,14 @@ export default class AssetService extends Service{
         });
     }
     
-    public static getInstance(options: AssetServiceOptions) {
+    public static getInstance(options: AssetServiceOptions = {}) {
         if (!this.instance) {
           throw new Error("Asset service is invalid or hasn't been initialized yet");
         }
         return this.instance;
     }
     
-    public static initialize(options: AssetServiceOptions) {
+    public static initialize(options: AssetServiceOptions = {}) {
         const service = new AssetService(options);
         if(!this.instance) {
           this.instance = service;

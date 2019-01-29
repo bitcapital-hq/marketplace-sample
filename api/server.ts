@@ -15,7 +15,7 @@ import AssetController from './controllers/AssetController';
 import ProductController from './controllers/ProductController';
 import StatusController from './controllers/StatusController';
 
-const sentry = process.env.SENTRY_DSN ? { dsn: process.env.SENTRY_DSN } : undefined;
+const sentry = Config.dns.sentry;
 const logger = Logger.getInstance({ sentry });
 
 export default class MainServer extends Server {
@@ -33,12 +33,12 @@ export default class MainServer extends Server {
       children: [
         MainDatabase.getInstance(),
         UptimeService.getInstance(),
-        UserService.initialize({}),
-        ExtractService.initialize({}),
-        BitcapitalService.initialize({}),
-        DocumentService.initialize({}),
-        AssetService.initialize({}),
-        ProductService.initialize({})
+        UserService.initialize(),
+        ExtractService.initialize(),
+        BitcapitalService.initialize(),
+        DocumentService.initialize(),
+        AssetService.initialize(),
+        ProductService.initialize()
       ],
       ...options,
     });

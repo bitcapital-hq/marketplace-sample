@@ -15,14 +15,14 @@ export default class BitcapitalService extends Service{
         super(options);
     }
 
-    public static getInstance(options: BitcapitalServiceOptions) {
+    public static getInstance(options: BitcapitalServiceOptions = {}) {
         if (!this.instance) {
           throw new Error("Bitcapital service is invalid or hasn't been initialized yet");
         }
         return this.instance;
     }
     
-    public static initialize(options: BitcapitalServiceOptions) {
+    public static initialize(options: BitcapitalServiceOptions = {}) {
         const service = new BitcapitalService(options);
         if(!this.instance) {
           this.instance = service;
