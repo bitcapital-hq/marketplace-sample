@@ -1,7 +1,7 @@
 import { Service, ServiceOptions } from 'ts-framework-common';
 import {User} from '../models'
 import  BitcapitalService from './BitcapitalService'
-import { UserRole } from 'bitcapital-core-sdk';
+import { UserRole, Wallet } from 'bitcapital-core-sdk';
 
 export interface UserServiceOptions extends ServiceOptions{
 
@@ -14,9 +14,12 @@ export default class UserService extends Service {
         return User.findById(id);
     }
 
-    public async getUserBalance(id: string){
+    public async getUserBalance(id: string) {
         const user: User = await this.getUser(id);
-        
+        const bitcapitalClient = BitcapitalService.getInstance({}).bitcapital;
+
+        const wallet: Wallet = await bitcapitalClient.wallets().findOne(user.bitcapitalWalletId);
+        return wallet.balances;
     }
 
     public async createUser(body: any) {
@@ -49,7 +52,7 @@ export default class UserService extends Service {
         return user.save();
     }
 
-    private async createUserOnBitcapital(body: any){
+    private async createUserOnBitcapital(body: any) {
         const bitcapital = BitcapitalService.getInstance({}).bitcapital;
 
         return bitcapital.consumers().create({

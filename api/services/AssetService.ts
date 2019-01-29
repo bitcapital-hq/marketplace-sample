@@ -7,7 +7,9 @@ export interface AssetServiceOptions extends ServiceOptions{
 
 export default class AssetService extends Service{
     protected static instance: AssetService;
-    private static assetId: string = 'BOBD';
+
+    //this sucks, i know
+    private static assetId: string = 'b431a6d8-73fe-47d6-948a-77943114c66d';
 
     constructor(options: AssetServiceOptions) {
         super(options);

@@ -13,6 +13,7 @@ import AssetService from './services/AssetService';
 import ProductService from './services/ProductService';
 import AssetController from './controllers/AssetController';
 import ProductController from './controllers/ProductController';
+import StatusController from './controllers/StatusController';
 
 const sentry = process.env.SENTRY_DSN ? { dsn: process.env.SENTRY_DSN } : undefined;
 const logger = Logger.getInstance({ sentry });
@@ -26,7 +27,8 @@ export default class MainServer extends Server {
       router: {
         controllers: { UserController,
                         AssetController,
-                        ProductController }
+                        ProductController,
+                        StatusController }
       },
       children: [
         MainDatabase.getInstance(),

@@ -1,4 +1,4 @@
-import { ServiceOptions, Service } from 'ts-framework-common';
+import { ServiceOptions, Service, BaseError } from 'ts-framework-common';
 import BitcapitalService from './BitcapitalService';
 import { DocumentType } from 'bitcapital-core-sdk';
 import {User} from '../models'
@@ -23,6 +23,10 @@ export default class DocumentService extends Service{
     public async setDocumentForUser(id: string, photoBase64: string){
         const bitcapitalClient = BitcapitalService.getInstance({}).bitcapital;
         const user: User = await UserService.getInstance({}).getUser(id);
+
+        if(user == null){
+            throw new BaseError('Cannot find user with id', {id: id});
+        }
 
         await bitcapitalClient.consumers().createDocument(user.bitcapitalId, {
             type: DocumentType.BRL_IDENTITY
