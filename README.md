@@ -14,12 +14,12 @@ Sample project of a bit capital client
 8) Crypto transaction extract - DONE
 9) Deposit asset - DONE
 10) Withdraw asset - DONE
-11) Create product
-12) Create sell offer
-13) User buy product
-14) User Balance
-
-....
-N) Develop unit tests
-N+1) Fault resilience?
-N+2) Documentation
+11) Create product - DONE
+12) Create sell offer - DONE
+13) User buy product - DONE
+14) User Balance - DONE
+15) Develop unit tests
+16) Develop integration tests
+17) Add transactional to the buy product method
+18) Add logs
+19) Documentation
