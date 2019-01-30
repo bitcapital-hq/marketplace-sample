@@ -13,9 +13,8 @@ export default class AssetService extends Service{
         super(options);
     }
 
-    public async creditAssetForUser(receiverId:string, amount:number){
+    public async creditAssetForUser(receiver:User, amount:number){
         const bitcapitalClient = BitcapitalService.getInstance({}).bitcapital;
-        const receiver: User = await User.findById(receiverId);
         
         return await bitcapitalClient.assets().emit({
             amount: amount.toString(),
@@ -24,9 +23,8 @@ export default class AssetService extends Service{
         });
     }
 
-    public async debitAssetFromUser(senderId:string, amount:number){
+    public async debitAssetFromUser(sender:User, amount:number){
         const bitcapitalClient = BitcapitalService.getInstance({}).bitcapital;
-        const sender: User = await User.findById(senderId);
 
         return await bitcapitalClient.assets().destroy({
             amount: amount.toString(),
