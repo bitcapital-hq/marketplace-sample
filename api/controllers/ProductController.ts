@@ -18,7 +18,7 @@ export default class ProductController {
         { buyerId:string, sellerId:string, amount:number } = req.body;
 
         const { name }:{ name:string } = req.params;
-        const result = ProductService.getInstance()
+        const result = await ProductService.getInstance()
                                 .buyProduct(buyerId, sellerId, name, amount);
 
         return res.success(result);

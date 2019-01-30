@@ -3,7 +3,7 @@ import Product from '../models/Product';
 import User from '../models/User';
 import ProductStorage from '../models/ProductStorage';
 import AssetService from './AssetService';
-import { Transaction } from 'typeorm';
+import { Transaction, TransactionManager, EntityManager } from 'typeorm';
 import { Extract } from '../models';
 import { ExtractService } from '.';
 
@@ -14,12 +14,12 @@ export interface ProductServiceOptions extends ServiceOptions{
 export default class ProductService extends Service {
     protected static instance: ProductService;
 
-    @Transaction()
-    public async buyProduct(buyerId:string, sellerId:string, productName:string, quantity:number) {
+    public async buyProduct
+    (buyerId:string, sellerId:string, productName:string, quantity:number) {
         const buyer: User =  await User.findById(buyerId);
         const seller: User =  await User.findById(sellerId);
         const product: Product = await Product.findByName(productName);
-        const productStorage: ProductStorage = await ProductStorage.findProductStorageForUserAndProduct(seller, product);
+        const sellerStorage: ProductStorage = await ProductStorage.findProductStorageForUserAndProduct(seller, product);
         const assetService: AssetService = AssetService.getInstance();
 
         if(quantity <= 0){
@@ -27,12 +27,12 @@ export default class ProductService extends Service {
         }
 
         //não gostei disso mas é a vida
-        if(productStorage === null || productStorage.quantity < quantity){
-            throw new BaseError('Storage limit exceeded or storage doesnt exist.', { ProductStorage: productStorage,
+        if(sellerStorage == null || sellerStorage.quantity < quantity){
+            throw new BaseError('Storage limit exceeded or storage doesnt exist.', { ProductStorage: sellerStorage,
                                                             quantity: quantity });
         }
         
-        const totalPrice = (productStorage.price * quantity) + productStorage.deliveryFee;
+        const totalPrice = (sellerStorage.price * quantity) + sellerStorage.deliveryFee;
 
         //tira a grana do comprador
         await assetService.debitAssetFromUser(buyer, totalPrice);
@@ -44,10 +44,10 @@ export default class ProductService extends Service {
         await assetService.creditAssetForUser(seller, totalPrice);
 
         //da o produto pro comprador
-        const storage = await this.addProductToUserStorage(product, buyer, quantity, productStorage.price, productStorage.deliveryFee)
+        await this.addProductToUserStorage(product, buyer, quantity, sellerStorage.price, sellerStorage.deliveryFee)
     
         //add transaction to the extract
-        return await ExtractService.getInstance().createExtract(totalPrice, quantity, buyer, seller, storage); 
+        return ExtractService.getInstance().createExtract(totalPrice, quantity, buyer, seller, sellerStorage); 
     }   
 
     public async listAvailableProducts(){
@@ -76,15 +76,17 @@ export default class ProductService extends Service {
 
         const storage = await ProductStorage.findProductStorageForUserAndProduct(user, product);
 
-        if(storage === null){
+        if(storage == null){
             //create new storage
-            return ProductStorage.create({
+            const newStorage = await ProductStorage.create({
                 price: price,
                 deliveryFee: deliveryFee,
                 quantity: quantity,
                 owner: user,
                 product: product
             });
+
+            return ProductStorage.save(newStorage);
         } else {
             //add to existing storage
             storage.quantity += quantity;
@@ -95,7 +97,7 @@ export default class ProductService extends Service {
         }
     }
 
-    public async removeProductFromUserStorage(product: Product, user: User, quantity:number){
+    public async removeProductFromUserStorage(product: Product, user: User, quantity:number) {
         const storage = await ProductStorage.findProductStorageForUserAndProduct(user, product);
 
         if(storage == null){

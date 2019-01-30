@@ -44,15 +44,11 @@ export default class Extract extends BaseModel implements ExtractSchema{
         super(data);
     }
 
-    public static async getBuysForUser(userId: string){
-        return this.getRepository().createQueryBuilder("user")
-                    .where("customer.id = :id", { id: userId })
-                    .getMany();
+    public static async getBuysForUser(userId: string) {
+        return this.find({ where: {customerId: userId} });
     }
 
-    public static async getSellsForUser(userId: string){
-        return this.getRepository().createQueryBuilder("user")
-        .where("seller.id = :id", { id: userId })
-        .getMany();
+    public static async getSellsForUser(userId: string) {
+        return this.find({ where: {sellerId: userId} });
     }
 }

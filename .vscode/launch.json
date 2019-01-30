@@ -30,7 +30,7 @@
       },
       "sourceMaps": true,
       "internalConsoleOptions": "openOnFirstSessionStart",
-      "console": "externalTerminal"
+      "console": "integratedTerminal"
     },
     {
       "name": "Debug Jest Single File",

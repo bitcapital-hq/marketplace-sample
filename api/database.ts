@@ -4,7 +4,10 @@ import * as Models from "./models";
 
 export default class MainDatabase extends EntityDatabase {
   public static readonly ENTITIES = [
-    Models.User
+    Models.User,
+    Models.Extract,
+    Models.Product,
+    Models.ProductStorage
   ];
 
   protected static readonly instance: MainDatabase = new MainDatabase({

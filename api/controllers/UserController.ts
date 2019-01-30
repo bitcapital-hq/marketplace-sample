@@ -19,7 +19,7 @@ export default class UserController {
   static async getUserBalance(req: BaseRequest, res: BaseResponse){
     const { id }: { id: string } = req.params;
 
-    const balance = UserService.getInstance().getUserBalance(id);
+    const balance = await UserService.getInstance().getUserBalance(id);
     return res.success(balance);
   }
 

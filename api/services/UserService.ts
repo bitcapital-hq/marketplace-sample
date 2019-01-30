@@ -52,7 +52,7 @@ export default class UserService extends Service {
         return user.save();
     }
 
-    private async createUserOnBitcapital(body: any) {
+    public async createUserOnBitcapital(body: any) {
         const bitcapital = BitcapitalService.getInstance().bitcapital;
 
         return bitcapital.consumers().create({

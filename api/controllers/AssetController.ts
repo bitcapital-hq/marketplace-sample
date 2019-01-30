@@ -10,7 +10,7 @@ export default class AssetController {
         const { userId, amount }: { userId: string, amount: number } = req.body
         const user: User = await User.findById(userId);
 
-        const result = AssetService.getInstance().creditAssetForUser(user, amount);
+        const result = await AssetService.getInstance().debitAssetFromUser(user, amount);
         return res.success(result);
     }
 
@@ -19,7 +19,7 @@ export default class AssetController {
         const { userId, amount }: { userId: string, amount: number } = req.body
         const user: User = await User.findById(userId);
 
-        const result = AssetService.getInstance().creditAssetForUser(user, amount);
+        const result = await AssetService.getInstance().creditAssetForUser(user, amount);
         return res.success(result);
     }
 }

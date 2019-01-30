@@ -9,7 +9,7 @@ export default class AssetService extends Service{
     protected static instance: AssetService;
 
     //this sucks, i know
-    private static assetId: string = 'b431a6d8-73fe-47d6-948a-77943114c66d';
+    private static assetId: string = '6ddbf2d9-172f-490b-bb30-71689efa6ccb';
 
     constructor(options: AssetServiceOptions) {
         super(options);
@@ -18,9 +18,9 @@ export default class AssetService extends Service{
     public async creditAssetForUser(receiver:User, amount:number){
         const bitcapitalClient = BitcapitalService.getInstance().bitcapital;
         
-        return await bitcapitalClient.assets().emit({
+        return bitcapitalClient.assets().emit({
             amount: amount.toString(),
-            destination: receiver.bitcapitalId,
+            destination: receiver.bitcapitalWalletId,
             id: AssetService.assetId
         });
     }
@@ -28,9 +28,9 @@ export default class AssetService extends Service{
     public async debitAssetFromUser(sender:User, amount:number){
         const bitcapitalClient = BitcapitalService.getInstance().bitcapital;
 
-        return await bitcapitalClient.assets().destroy({
+        return bitcapitalClient.assets().destroy({
             amount: amount.toString(),
-            source: sender.bitcapitalId,
+            source: sender.bitcapitalWalletId,
             id: AssetService.assetId
         });
     }

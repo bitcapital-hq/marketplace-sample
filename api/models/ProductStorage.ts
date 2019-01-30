@@ -41,7 +41,7 @@ export default class ProductStorage extends BaseModel implements ProductStorageS
         super(data);
     }
 
-    public static async findProductStorageForUserAndProduct(user: User, product:Product){
+    public static async findProductStorageForUserAndProduct(user: User, product:Product) {
         return this.findOne({
             where:{
                 owner: user,
@@ -50,7 +50,7 @@ export default class ProductStorage extends BaseModel implements ProductStorageS
         });
     }
 
-    public static async listAllStorages(){
-        return this.find();
+    public static async listAllStorages() {
+        return this.find( { relations: ["owner", "product"]} );
     }
 }
