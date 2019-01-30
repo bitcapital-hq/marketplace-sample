@@ -1,5 +1,6 @@
 import { Service, ServiceOptions } from 'ts-framework-common';
-import { Extract } from '../models';
+import { Extract, User } from '../models';
+import BitcapitalService from './BitcapitalService';
 
 export interface ExtractServiceOptions extends ServiceOptions{
 }
@@ -11,11 +12,18 @@ export default class ExtractService extends Service {
         super(options);
     }
 
-    public static async getBuyExtractForUser(id: string){
+    public async getBitcapitalExtractForUser(id: string){
+        const bitcapitalClient = BitcapitalService.getInstance({}).bitcapital;
+        const user = await User.findOne(id);
+
+        return bitcapitalClient.wallets().findWalletPayments(user.bitcapitalWalletId, {});
+    }
+
+    public async getBuyExtractForUser(id: string){
         return Extract.getBuysForUser(id);
     }
 
-    public static async getSellExtractForUser(id: string){
+    public async getSellExtractForUser(id: string){
         return Extract.getSellsForUser(id);
     }
 

@@ -2,33 +2,36 @@ import * as Package from 'pjson';
 import { Controller, Get, BaseRequest, BaseResponse, Post } from 'ts-framework';
 import {User} from '../models';
 import { UserService, ExtractService } from '../services/';
+import DocumentService from '../services/DocumentService';
 
-@Controller('/user')
+@Controller('/users')
 export default class UserController {
 
   @Get('/:id')
   static async getUser(req: BaseRequest, res: BaseResponse) {
     return res.success({
-      user: await UserService.getUser(req.params.id)
+      user: await UserService.getInstance({}).getUser(req.params.id)
     });
-  }
-
-  @Get('/:id/kyc')
-  static async getKycStatusForUser(req: BaseRequest, res: BaseResponse) {
-
   }
 
   @Get('/:id/extract')
   static async getUserExtract(req: BaseRequest, res: BaseResponse) {
-    return res.success({
-      buys: await ExtractService.getBuyExtractForUser(req.params.id),
-      sells: await ExtractService.getSellExtractForUser(req.params.id)
-    });
+    const [buys, sells] = await Promise.all([
+      ExtractService.getInstance({}).getBuyExtractForUser(req.params.id),
+      ExtractService.getInstance({}).getSellExtractForUser(req.params.id)
+    ]);
+    
+    return res.success({ buys, sells });
   }
 
-  @Get('/:id/crypto-extract')
+  @Get('/:id/stellar-extract')
   static async getUserCryptoExtract(req: BaseRequest, res: BaseResponse) {
+    return res.success(await ExtractService.getInstance({}).getBitcapitalExtractForUser(req.params.id));
+  }
 
+  @Get('/:id/document')
+  static async getKycStatusForUser(req: BaseRequest, res: BaseResponse) {
+    return res.success(await DocumentService.getInstance({}).getDocumentStatusForUser(req.params.id));
   }
 
   @Post('/signup')
@@ -36,8 +39,11 @@ export default class UserController {
     return res.success(await UserService.getInstance({}).createUser(req.body));
   }
 
-  @Post('/:id/documents')
+  @Post('/:id/document')
   static async sendKYCDocuments(req: BaseRequest, res: BaseResponse) {
-    
+    const photo = (req as any).file;
+
+    return res.success(await DocumentService.getInstance({})
+              .setDocumentForUser(req.params.id, Buffer.from(photo.buffer).toString('base64')));
   }
 }

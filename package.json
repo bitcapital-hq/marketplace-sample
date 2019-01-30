@@ -11,7 +11,7 @@
     "test": "jest --config jest.json"
   },
   "dependencies": {
-    "bitcapital-core-sdk": "github:bitcapital-hq/bitcapital-core-sdk#1.3.0",
+    "bitcapital-core-sdk": "bitcapital-hq/bitcapital-core-sdk#1.5.0",
     "pg": "^7.8.0",
     "pjson": "^1.0.9",
     "ts-framework": "nxtep-io/ts-framework#v2.4",
