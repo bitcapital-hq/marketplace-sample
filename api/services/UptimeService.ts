@@ -1,4 +1,4 @@
-import { Service } from 'ts-framework-common';
+import { Service } from "ts-framework-common";
 
 export default class UptimeService extends Service {
   private static instance: UptimeService;
@@ -11,7 +11,7 @@ export default class UptimeService extends Service {
     mounted: 0,
     initialized: 0,
     ready: 0,
-    unmounted: 0,
+    unmounted: 0
   };
 
   constructor(options) {
@@ -25,7 +25,7 @@ export default class UptimeService extends Service {
     }
     return this.instance;
   }
-  
+
   onMount() {
     this.history.mounted = Date.now();
   }

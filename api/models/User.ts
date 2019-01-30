@@ -1,9 +1,9 @@
-import { Column, Entity } from 'typeorm';
-import BaseModel from './BaseModel';
-import { IsEmail, IsNumberString, IsEnum } from 'class-validator';
-import { BaseModelSchema } from './BaseModel';
-import { UserStatus } from 'bitcapital-core-sdk';
-import UserService from '../services/UserService';
+import { Column, Entity } from "typeorm";
+import BaseModel from "./BaseModel";
+import { IsEmail, IsNumberString, IsEnum } from "class-validator";
+import { BaseModelSchema } from "./BaseModel";
+import { UserStatus } from "bitcapital-core-sdk";
+import UserService from "../services/UserService";
 
 export interface UserSchema extends BaseModelSchema {
   name: string;
@@ -26,7 +26,7 @@ export interface UserSchema extends BaseModelSchema {
 
 @Entity(User.tableName)
 export default class User extends BaseModel implements UserSchema {
-  private static readonly tableName = 'user';
+  private static readonly tableName = "user";
 
   @Column({ nullable: false })
   public name: string = undefined;
@@ -70,7 +70,7 @@ export default class User extends BaseModel implements UserSchema {
   @Column()
   @IsNumberString()
   public accountAgencyNumber?: string = undefined;
-  
+
   @Column()
   @IsNumberString()
   public accountBankNumber?: string = undefined;
@@ -94,9 +94,10 @@ export default class User extends BaseModel implements UserSchema {
 
   /**
    * Finds user based on its name.
-   */ 
+   */
+
   public static async findByName(name: string): Promise<User | undefined> {
-    return this.findOne({ where: {name} });
+    return this.findOne({ where: { name } });
   }
 
   public static async findById(id: string): Promise<User | undefined> {

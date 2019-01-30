@@ -1,49 +1,54 @@
 import { Controller, BaseRequest, BaseResponse, Get, Post } from "ts-framework";
-import ProductService from '../services/ProductService';
+import ProductService from "../services/ProductService";
 import { Product, User } from "../models";
 import { BaseError } from "ts-framework-common";
 
-@Controller('/products')
+@Controller("/products")
 export default class ProductController {
+  @Get("/available")
+  public static async listAvailableProducts(req: BaseRequest, res: BaseResponse) {
+    const products = await ProductService.getInstance({}).listAvailableProducts();
+    return res.success(products);
+  }
 
-    @Get('/available')
-    public static async listAvailableProducts(req: BaseRequest, res: BaseResponse) {
-        const products = await ProductService.getInstance({}).listAvailableProducts();
-        return res.success(products);
-    }
+  @Post("/:name/buy")
+  public static async buyProduct(req: BaseRequest, res: BaseResponse) {
+    const { buyerId, sellerId, amount }: { buyerId: string; sellerId: string; amount: number } = req.body;
 
-    @Post('/:name/buy')
-    public static async buyProduct(req: BaseRequest, res: BaseResponse) {
-        const { buyerId, sellerId, amount } : 
-        { buyerId:string, sellerId:string, amount:number } = req.body;
+    const { name }: { name: string } = req.params;
+    const result = await ProductService.getInstance().buyProduct(buyerId, sellerId, name, amount);
 
-        const { name }:{ name:string } = req.params;
-        const result = await ProductService.getInstance()
-                                .buyProduct(buyerId, sellerId, name, amount);
+    return res.success(result);
+  }
 
-        return res.success(result);
-    }
+  @Post("/create")
+  public static async createProduct(req: BaseRequest, res: BaseResponse) {
+    const { name, description, url }: { name: string; description: string; url: string } = req.body;
 
-    @Post('/create')
-    public static async createProduct(req: BaseRequest, res: BaseResponse) {
-        const {name, description, url} : {name:string, description:string, url:string} = req.body;
+    const product = await ProductService.getInstance().createProduct(name, description, url);
+    return res.success(product);
+  }
 
-        const product = await ProductService.getInstance().createProduct(name, description, url);
-        return res.success(product);
-    }
+  @Post("/:name/sell")
+  public static async addProductSellOffer(req: BaseRequest, res: BaseResponse) {
+    const {
+      sellerId,
+      amount,
+      price,
+      deliveryFee
+    }: { sellerId: string; amount: number; price: number; deliveryFee: number } = req.body;
+    const { name }: { name: string } = req.params;
+    const product: Product = await Product.findByName(name);
+    const seller: User = await User.findById(sellerId);
 
-    @Post('/:name/sell')
-    public static async addProductSellOffer(req: BaseRequest, res: BaseResponse) {
-        const { sellerId, amount, price, deliveryFee } :
-            { sellerId:string, amount:number, price:number, deliveryFee:number } = req.body;
-        const { name }: { name:string } = req.params;
-        const product: Product = await Product.findByName(name);
-        const seller: User = await User.findById(sellerId);
+    const storage = await ProductService.getInstance().addProductToUserStorage(
+      product,
+      seller,
+      amount,
+      price,
+      deliveryFee
+    );
 
-        const storage = await ProductService.getInstance()
-                        .addProductToUserStorage(product, seller, amount, price, deliveryFee);
-
-        return res.success(storage);
-    }
-
+    return res.success(storage);
+  }
 }
