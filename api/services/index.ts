@@ -1,6 +1,3 @@
-import DocumentService from "./DocumentService";
-import AssetService from "./AssetService";
-import ProductService from "./ProductService";
 export { default as UserService } from "./UserService";
 export { default as UptimeService } from "./UptimeService";
 export { default as ExtractService } from "./ExtractService";

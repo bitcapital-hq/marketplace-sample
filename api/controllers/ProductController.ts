@@ -2,13 +2,16 @@ import { Controller, BaseRequest, BaseResponse, Get, Post } from "ts-framework";
 import ProductService from "../services/ProductService";
 import { Product, User } from "../models";
 import { BaseError } from "ts-framework-common";
+import StorageWrapper from '../wrappers/StorageWrapper';
 
 @Controller("/products")
 export default class ProductController {
   @Get("/available")
   public static async listAvailableProducts(req: BaseRequest, res: BaseResponse) {
     const products = await ProductService.getInstance({}).listAvailableProducts();
-    return res.success(products);
+    const result = products.map(StorageWrapper.getInstance().wrap);
+
+    return res.success(result);
   }
 
   @Post("/:name/buy")

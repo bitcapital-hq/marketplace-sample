@@ -1,4 +1,4 @@
-import { Service, ServiceOptions } from "ts-framework-common";
+import { Service, ServiceOptions, BaseError } from 'ts-framework-common';
 import { User } from "../models";
 import BitcapitalService from "./BitcapitalService";
 import { UserRole, Wallet } from "bitcapital-core-sdk";
@@ -9,7 +9,11 @@ export default class UserService extends Service {
   protected static instance: UserService;
 
   public async getUser(id: string) {
-    return User.findById(id);
+      const user = await User.findById(id);
+      if(user == null){
+        throw new BaseError('User with id doesnt exist.', {id});
+      }
+      return user;
   }
 
   public async getUserBalance(id: string) {

@@ -14,6 +14,7 @@ import ProductService from './services/ProductService';
 import AssetController from './controllers/AssetController';
 import ProductController from './controllers/ProductController';
 import StatusController from './controllers/StatusController';
+import UserWrapper from './wrappers/UserWrapper';
 
 const sentry = Config.dns.sentry;
 const logger = Logger.getInstance({ sentry });
@@ -38,7 +39,7 @@ export default class MainServer extends Server {
         BitcapitalService.initialize(),
         DocumentService.initialize(),
         AssetService.initialize(),
-        ProductService.initialize()
+        ProductService.initialize(),
       ],
       ...options,
     });

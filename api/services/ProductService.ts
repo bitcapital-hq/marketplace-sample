@@ -27,7 +27,7 @@ export default class ProductService extends Service {
     if (sellerStorage == null || sellerStorage.quantity < quantity) {
       throw new BaseError("Storage limit exceeded or storage doesnt exist.", {
         ProductStorage: sellerStorage,
-        quantity
+        amount: quantity
       });
     }
 
