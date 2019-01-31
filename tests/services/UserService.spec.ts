@@ -1,9 +1,11 @@
 import UserService from '../../api/services/UserService';
 import { User } from '../../api/models';
 import MainServer from '../../api/server';
-import * as Config from '../../config';
+import { userInfo } from 'os';
 
 jest.setTimeout(60000);
+const CPF = require('cpf');
+
 
 describe("api.services.UserService", () => {
     let server;
@@ -18,18 +20,22 @@ describe("api.services.UserService", () => {
     });
 
     it("should create a user", async () => {
+        // generate new random user every time
+        const cpf = CPF.generate(false, false);
+        const email = "danilo.mendes." + cpf + "@bitcapital.com.br";
+        
         const user: User = await UserService.getInstance({}).createUser({
-			"name": " Danilo",
-            "email": "danilo.mendes.lindao23@bitcapital.com.br",
-            "document": "41827185856",
+			"name": "Danilo",
+            "email": email,
+            "document": cpf,
             "status": "ACTIVE",
             "telephoneCountryCode": "55",
             "telephoneRegionalCode": "19",
             "telephoneNumber": "996416288",
             "residenceNumber": "130",
             "residenceZipcode": "13087460",
-            "residenceInformation": "Apartamento 33 torre 2",
-            "residenceReference": "Do lado da dorgaria",
+            "residenceInformation": "Integration test",
+            "residenceReference": "Integration test",
             "accountAgencyNumber": "88",
             "accountBankNumber": "1111",
             "accountNumber": "123123"
@@ -37,5 +43,11 @@ describe("api.services.UserService", () => {
 
         expect(user.name).toBe('Danilo');
         expect(user.bitcapitalId).toBeDefined();
+        expect(user.bitcapitalWalletId).toBeDefined();
+
+    })
+
+    it("should return error when creating a user", async () => {
+        
     });
   });

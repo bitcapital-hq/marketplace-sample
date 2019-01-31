@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "bitcapital-core-sdk": "bitcapital-hq/bitcapital-core-sdk#1.5.0",
+    "cpf": "^2.0.1",
     "pg": "^7.8.0",
     "pjson": "^1.0.9",
     "ts-framework": "nxtep-io/ts-framework#v2.4",
