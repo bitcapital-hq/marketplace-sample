@@ -1,6 +1,5 @@
 import { Column, Entity, ManyToOne } from "typeorm";
-import BaseModel from "./BaseModel";
-import { BaseModelSchema } from "./BaseModel";
+import BaseModel, { BaseModelSchema } from "./BaseModel";
 import User from "./User";
 import ProductStorage from "./ProductStorage";
 

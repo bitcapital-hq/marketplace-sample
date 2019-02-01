@@ -1,6 +1,5 @@
 import { Column, Entity, ManyToOne } from "typeorm";
-import BaseModel from "./BaseModel";
-import { BaseModelSchema } from "./BaseModel";
+import BaseModel, { BaseModelSchema } from "./BaseModel";
 import { IsNumber } from "class-validator";
 import Product from "./Product";
 import User from "./User";
@@ -44,8 +43,8 @@ export default class ProductStorage extends BaseModel implements ProductStorageS
   public static async findProductStorageForUserAndProduct(user: User, product: Product) {
     return this.findOne({
       where: {
-        owner: user,
-        product
+        product,
+        owner: user
       }
     });
   }

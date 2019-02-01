@@ -3,8 +3,6 @@ import Product from "../models/Product";
 import User from "../models/User";
 import ProductStorage from "../models/ProductStorage";
 import AssetService from "./AssetService";
-import { Transaction, TransactionManager, EntityManager } from "typeorm";
-import { Extract } from "../models";
 import { ExtractService } from ".";
 
 export interface ProductServiceOptions extends ServiceOptions {}
@@ -86,10 +84,9 @@ export default class ProductService extends Service {
         price,
         deliveryFee,
         quantity,
-        owner: user,
-        product
+        product,
+        owner: user
       });
-
       return ProductStorage.save(newStorage);
     }
     // add to existing storage
@@ -97,7 +94,7 @@ export default class ProductService extends Service {
     storage.price = price;
     storage.deliveryFee = deliveryFee;
 
-    return ProductStorage.save(storage[0]);
+    return ProductStorage.save(storage);
   }
 
   public async removeProductFromUserStorage(product: Product, user: User, quantity: number) {

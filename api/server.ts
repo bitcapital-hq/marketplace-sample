@@ -15,6 +15,7 @@ import AssetController from './controllers/AssetController';
 import ProductController from './controllers/ProductController';
 import StatusController from './controllers/StatusController';
 import UserWrapper from './wrappers/UserWrapper';
+import CreateProductJob from './jobs/CreateProductJob';
 
 const sentry = Config.dns.sentry;
 const logger = Logger.getInstance({ sentry });
@@ -43,5 +44,17 @@ export default class MainServer extends Server {
       ],
       ...options,
     });
+  }
+
+  async onMount(): Promise<void> {
+    this.component(
+      new CreateProductJob()
+    )
+
+    super.onMount();
+  }
+
+  async onReady(): Promise<void> {
+    super.onReady();
   }
 }
