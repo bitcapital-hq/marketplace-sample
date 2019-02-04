@@ -5,3 +5,4 @@ export { default as BitcapitalService } from "./BitcapitalService";
 export { default as DocumentService } from "./DocumentService";
 export { default as AssetService } from "./AssetService";
 export { default as ProductService } from "./ProductService";
+export { default as ProductTransactionalService } from "./ProductTransactionalService";

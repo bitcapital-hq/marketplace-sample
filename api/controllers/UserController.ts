@@ -7,13 +7,12 @@ import { UserWrapper, ExtractWrapper, PaymentWrapper } from "../wrappers";
 
 @Controller("/users")
 export default class UserController {
-
   @Get("/:id")
   static async getUser(req: BaseRequest, res: BaseResponse) {
     const { id }: { id: string } = req.params;
 
     const user = await UserService.getInstance().getUser(id);
-    const result = UserWrapper.getInstance().wrap(user)
+    const result = UserWrapper.getInstance().wrap(user);
     return res.success(result);
   }
 
@@ -63,7 +62,7 @@ export default class UserController {
   @Post("/signup")
   static async userSignup(req: BaseRequest, res: BaseResponse) {
     const user = await UserService.getInstance().createUser(req.body);
-    const result = UserWrapper.getInstance().wrap(user)
+    const result = UserWrapper.getInstance().wrap(user);
 
     return res.success(result);
   }

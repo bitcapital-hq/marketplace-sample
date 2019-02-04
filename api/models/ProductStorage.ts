@@ -14,7 +14,7 @@ export interface ProductStorageSchema extends BaseModelSchema {
 
 @Entity(ProductStorage.tableName)
 export default class ProductStorage extends BaseModel implements ProductStorageSchema {
-  private static readonly tableName = "storage";
+  public static readonly tableName = "storage";
 
   @Column({ nullable: false })
   @IsNumber()

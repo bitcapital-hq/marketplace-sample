@@ -10,7 +10,6 @@ export interface ProductServiceOptions extends ServiceOptions {}
 export default class ProductService extends Service {
   protected static instance: ProductService;
 
-  
   public async buyProduct(buyerId: string, sellerId: string, productName: string, quantity: number) {
     const buyer: User = await User.findById(buyerId);
     const seller: User = await User.findById(sellerId);

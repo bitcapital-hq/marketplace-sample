@@ -16,6 +16,7 @@ import ProductController from './controllers/ProductController';
 import StatusController from './controllers/StatusController';
 import UserWrapper from './wrappers/UserWrapper';
 import CreateProductJob from './jobs/CreateProductJob';
+import ProductTransactionalService from './services/ProductTransactionalService';
 
 const sentry = Config.dns.sentry;
 const logger = Logger.getInstance({ sentry });
@@ -41,6 +42,7 @@ export default class MainServer extends Server {
         DocumentService.initialize(),
         AssetService.initialize(),
         ProductService.initialize(),
+        ProductTransactionalService.initialize()
       ],
       ...options,
     });

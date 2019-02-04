@@ -1,7 +1,7 @@
 import { Controller, Post, BaseRequest, BaseResponse } from "ts-framework";
 import AssetService from "../services/AssetService";
 import { User } from "../models";
-import PaymentWrapper from '../wrappers/PaymentWrapper';
+import PaymentWrapper from "../wrappers/PaymentWrapper";
 
 @Controller("/assets")
 export default class AssetController {
