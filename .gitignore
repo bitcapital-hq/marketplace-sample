@@ -15,7 +15,6 @@ bower_components
 .lock-wscript
 build/Release
 node_modules/
-config/*
 jspm_packages/
 .npm
 .eslintcache
