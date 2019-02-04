@@ -1,13 +1,15 @@
 import { ServiceOptions, Service } from "ts-framework-common";
 import BitcapitalService from "./BitcapitalService";
 import { User } from "../models";
+import { asset } from "../../config";
+
 export interface AssetServiceOptions extends ServiceOptions {}
 
 export default class AssetService extends Service {
   protected static instance: AssetService;
 
   // this sucks, i know
-  private static assetId: string = "6ddbf2d9-172f-490b-bb30-71689efa6ccb";
+  private static assetId: string = asset.id;
 
   constructor(options: AssetServiceOptions) {
     super(options);

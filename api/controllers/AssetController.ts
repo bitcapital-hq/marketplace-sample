@@ -1,6 +1,7 @@
 import { Controller, Post, BaseRequest, BaseResponse } from "ts-framework";
 import AssetService from "../services/AssetService";
 import { User } from "../models";
+import PaymentWrapper from '../wrappers/PaymentWrapper';
 
 @Controller("/assets")
 export default class AssetController {
@@ -9,7 +10,8 @@ export default class AssetController {
     const { userId, amount }: { userId: string; amount: number } = req.body;
     const user: User = await User.findById(userId);
 
-    const result = await AssetService.getInstance().debitAssetFromUser(user, amount);
+    const payment = await AssetService.getInstance().debitAssetFromUser(user, amount);
+    const result = PaymentWrapper.getInstance().wrap(payment);
     return res.success(result);
   }
 
@@ -18,7 +20,8 @@ export default class AssetController {
     const { userId, amount }: { userId: string; amount: number } = req.body;
     const user: User = await User.findById(userId);
 
-    const result = await AssetService.getInstance().creditAssetForUser(user, amount);
+    const payment = await AssetService.getInstance().creditAssetForUser(user, amount);
+    const result = PaymentWrapper.getInstance().wrap(payment);
     return res.success(result);
   }
 }

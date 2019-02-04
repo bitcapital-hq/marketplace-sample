@@ -3,7 +3,6 @@ import BaseModel from "./BaseModel";
 import { IsEmail, IsNumberString, IsEnum } from "class-validator";
 import { BaseModelSchema } from "./BaseModel";
 import { UserStatus } from "bitcapital-core-sdk";
-import UserService from "../services/UserService";
 
 export interface UserSchema extends BaseModelSchema {
   name: string;

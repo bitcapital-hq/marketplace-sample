@@ -1,6 +1,5 @@
 import { Column, Entity, ManyToOne } from "typeorm";
-import BaseModel from "./BaseModel";
-import { BaseModelSchema } from "./BaseModel";
+import BaseModel, { BaseModelSchema } from "./BaseModel";
 import User from "./User";
 import ProductStorage from "./ProductStorage";
 
@@ -45,10 +44,10 @@ export default class Extract extends BaseModel implements ExtractSchema {
   }
 
   public static async getBuysForUser(userId: string) {
-    return this.find({ where: { customerId: userId } });
+    return this.find({ where: { customer: userId }, relations: ["customer", "seller"] });
   }
 
   public static async getSellsForUser(userId: string) {
-    return this.find({ where: { sellerId: userId } });
+    return this.find({ where: { seller: userId, relations: ["customer", "seller"] } });
   }
 }
