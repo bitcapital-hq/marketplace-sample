@@ -36,7 +36,6 @@ export default class CreateProductJob extends Job {
       
         product.validate();
         product.save();
-        
         this.logger.info("Finished create product job");
     }
 
