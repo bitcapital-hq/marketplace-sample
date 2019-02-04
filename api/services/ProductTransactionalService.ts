@@ -27,7 +27,7 @@ export default class ProductTransactionalService extends Service {
 
       const sellerStorage: ProductStorage = await transactionalEntityManager
         .createQueryBuilder(ProductStorage, ProductStorage.tableName)
-        .where("storage.ownerId = :ownerId AND storage.productId = :productId", {
+        .where("storage.owner = :ownerId AND storage.product = :productId", {
           productId: product.id,
           ownerId: seller.id
         })
@@ -52,7 +52,7 @@ export default class ProductTransactionalService extends Service {
       await transactionalEntityManager
         .createQueryBuilder()
         .update(ProductStorage)
-        .set({ quantity })
+        .set({ quantity: sellerStorage.quantity })
         .where("id = :id", { id: sellerStorage.id })
         .execute();
 
@@ -66,7 +66,7 @@ export default class ProductTransactionalService extends Service {
 
       const buyerStorage = await transactionalEntityManager
         .createQueryBuilder(ProductStorage, ProductStorage.tableName)
-        .where("storage.ownerId = :ownerId AND storage.productId = :productId", {
+        .where("storage.owner = :ownerId AND storage.product = :productId", {
           productId: product.id,
           ownerId: buyer.id
         })
