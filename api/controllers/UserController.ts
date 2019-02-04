@@ -3,15 +3,18 @@ import { Controller, Get, BaseRequest, BaseResponse, Post } from "ts-framework";
 import { User } from "../models";
 import { UserService, ExtractService } from "../services/";
 import DocumentService from "../services/DocumentService";
+import { UserWrapper, ExtractWrapper, PaymentWrapper } from "../wrappers";
 
 @Controller("/users")
 export default class UserController {
+
   @Get("/:id")
   static async getUser(req: BaseRequest, res: BaseResponse) {
     const { id }: { id: string } = req.params;
 
     const user = await UserService.getInstance().getUser(id);
-    return res.success(user);
+    const result = UserWrapper.getInstance().wrap(user)
+    return res.success(result);
   }
 
   @Get("/:id/balance")
@@ -31,7 +34,12 @@ export default class UserController {
       ExtractService.getInstance().getSellExtractForUser(id)
     ]);
 
-    return res.success({ buys, sells });
+    const [buysResult, sellsResult] = [
+      buys.map(ExtractWrapper.getInstance().wrap),
+      sells.map(ExtractWrapper.getInstance().wrap)
+    ];
+
+    return res.success({ buysResult, sellsResult });
   }
 
   @Get("/:id/stellar-extract")
@@ -39,7 +47,9 @@ export default class UserController {
     const { id }: { id: string } = req.params;
 
     const extract = await ExtractService.getInstance().getBitcapitalExtractForUser(id);
-    return res.success(extract);
+    const result = extract.map(PaymentWrapper.getInstance().wrap);
+
+    return res.success(result);
   }
 
   @Get("/:id/document")
@@ -53,7 +63,9 @@ export default class UserController {
   @Post("/signup")
   static async userSignup(req: BaseRequest, res: BaseResponse) {
     const user = await UserService.getInstance().createUser(req.body);
-    return res.success(user);
+    const result = UserWrapper.getInstance().wrap(user)
+
+    return res.success(result);
   }
 
   @Post("/:id/document")
